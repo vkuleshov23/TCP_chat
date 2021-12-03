@@ -15,7 +15,7 @@ public class ClientHandler implements Runnable {
 	String myName;
 
 	ClientHandler(ClientBase clientBase, Socket socket) {
-		clients = clientBase;
+		this.clients = clientBase;
 		this.setRandomName();
 		this.setMsgHandler(socket, clientBase);
 	}
@@ -52,7 +52,7 @@ public class ClientHandler implements Runnable {
 
 	private void handling() {
 		try {
-			msgHandler.setMe();
+			msgHandler.setMeToBase();
 			msgHandler.sendToMe("Your name is: " + myName + '\n');
 
 			System.out.println(myName + " join to client base");
@@ -62,8 +62,7 @@ public class ClientHandler implements Runnable {
 			err.getMessage();
 			err.printStackTrace();
 		} finally {
-			msgHandler.deleteMe();
-
+			msgHandler.deleteMeFromAll();
 			System.out.println(myName + " left the server");
 		}
 	}
@@ -88,6 +87,18 @@ public class ClientHandler implements Runnable {
 				break;
 			case "@name":
 				command = new ChangeName(msgHandler, packet.getMSG());
+				break;
+			case "@addIgnore":
+				command = new AddToIgnoreList(msgHandler, packet.getMSG());
+				break;
+			case "@delIgnore":
+				command = new DeleteFromIgnoreList(msgHandler, packet.getMSG());
+				break;
+			case "@addBlackList":
+				command = new AddToBlackList(msgHandler, packet.getMSG());
+				break;
+			case "@delBlackList":
+				command = new DeleteFromBlackList(msgHandler, packet.getMSG());
 				break;
 			default:
 				command = new SendAll(msgHandler, packet.getMSG());

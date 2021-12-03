@@ -28,7 +28,7 @@ public class SendUser implements ICommand {
 		
 			System.out.println("\t" + msgHandler.getName() +  " => " + name + ": " + msg);
 		} catch (IndexOutOfBoundsException e) {
-			msgHandler.sendToMe("Incorrect command");
+			msgHandler.sendToMe("[x] Incorrect command");
 		}
 	}
 }
